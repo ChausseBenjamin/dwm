@@ -43,6 +43,7 @@ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] 
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+static const int mainmon = 0; /* xsetroot will only change the bar on this monitor */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
