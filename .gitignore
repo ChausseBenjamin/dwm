@@ -1,6 +1,9 @@
 # Main binary file
 dwm
 
+# Patch files & directory
+*.orig
+*.rej
 pt/
 
 ### C ###
