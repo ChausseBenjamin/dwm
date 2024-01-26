@@ -45,6 +45,11 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 static const int mainmon = 0; /* xsetroot will only change the bar on this monitor */
 
+static const int lpm[] = {
+        /* Index of preferred layout], if LENGTH(lpm)<#monitors -> default layout */
+        0, 5
+};
+
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },    /* first entry is default */
