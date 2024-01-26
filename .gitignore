@@ -1,3 +1,8 @@
+# Main binary file
+dwm
+
+pt/
+
 ### C ###
 # Prerequisites
 *.d
