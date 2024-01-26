@@ -283,6 +283,8 @@ static Visual *visual;
 static int depth;
 static Colormap cmap;
 
+#include "movestack.c"
+
 /* configuration, allows nested code to access above variables */
 #include "config.h"
 
