@@ -3,13 +3,23 @@
 
 include config.mk
 
+# Determine the machine
+MACHINE := $(shell uname -n)
+
+# Set configuration flags based on the machine
+ifeq ($(MACHINE), battlestation)
+    CONFIG_FLAG = -D_HOST_BATTLESTATION
+else
+    CONFIG_FLAG = -D_HOST_DEFAULT
+endif
+
 SRC = drw.c dwm.c util.c
 OBJ = ${SRC:.c=.o}
 
 all: dwm
 
 .c.o:
-	${CC} -c ${CFLAGS} $<
+	${CC} -c ${CFLAGS} ${CONFIG_FLAG} $<
 
 ${OBJ}: config.h config.mk
 
@@ -43,3 +53,4 @@ uninstall:
 		${DESTDIR}${MANPREFIX}/man1/dwm.1
 
 .PHONY: all clean dist install uninstall
+
