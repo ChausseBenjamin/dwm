@@ -778,7 +778,13 @@ drawbar(Monitor *m)
 		return;
 
 	/* draw status first so it can be overdrawn by tags later */
-	if (m == &mons[mainmon]) { /* status is only drawn on selected monitor */
+  /* Desktop machines don't need the extra "privacy" of partial statusbar hiding */
+  #ifdef _HOST_BATTLESTATION
+	if (m == selmon) { /* status is only drawn on selected monitor */
+  #else // _HOST_DEFAULT
+	if (m == &mons[mainmon]) { /* status is only drawn on main monitor */
+  #endif // end of host specific code
+
 		char *text, *s, ch;
 		drw_setscheme(drw, scheme[SchemeNorm]);
 
