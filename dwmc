@@ -7,7 +7,7 @@ signal() {
 case $# in
 1)
 	case $1 in
-	setlayout | view | viewall | togglebar | togglefloating | zoom | killclient | quit | togglegaps | defaultgaps)
+	setlayout | view | viewall | togglebar | togglefloating | zoom | killclient | quit | togglegaps | defaultgaps | fullscreen)
 		signal "$1"
 		;;
 	*)

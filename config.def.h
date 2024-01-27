@@ -184,4 +184,5 @@ static Signal signals[] = {
   { "togglegaps",     togglegaps },
   { "defaultgaps",    defaultgaps },
   { "sigstatusbar",   sigstatusbar },
+  { "fullscreen",     fullscreen },
 };
