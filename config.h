@@ -7,10 +7,8 @@ static const unsigned int gappih    = 20;       /* horiz inner gap between windo
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov    = 30;       /* vert outer gap between windows and screen edge */
-static       int smartgaps          = 1;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]            = { "monospace:size=18" };
 static const char norm_fg[]           = "#447a6c";
 static const char norm_bg[]           = "#1b1d1b";
 static const char sel_fg[]            = "#1b1d1b";
@@ -55,10 +53,25 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 static const int mainmon = 0; /* xsetroot will only change the bar on this monitor */
 
-static const int lpm[] = {
-        /* Index of preferred layout], if LENGTH(lpm)<#monitors -> default layout */
-        0, 3
-};
+
+/* Devide dependent configurations */
+#ifdef _HOST_BATTLESTATION
+  // Main desktop uses a 4k monitor (good to have a bigger font)
+  static const char *fonts[] = { "monospace:size=18" };
+  /* LayoutPerMonitor:       4k->tile, ultrawide->tilewide */
+  static const int lpm[] = { 0,        0 };
+  /* Gaps are nice on a big monitor */
+  static       int smartgaps = 0;  /* 1 means no outer gap when there is only one window */
+
+#else // _HOST_DEFAULT
+  // Smaller font for laptop form factor
+  static const char *fonts[] = { "monospace:size=16" }; // HiDPI Framework laptop
+  /* LayoutPerMonitor:       main->tile */
+  static const int lpm[] = { 0 };
+  /* Gaps are nice on a big monitor */
+  static       int smartgaps = 1;  /* 1 means no outer gap when there is only one window */
+
+#endif // host dependent configurations
 
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
 #include "vanitygaps.c"
@@ -68,7 +81,7 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },    /* first entry is default */
 	{ "=oo",      monocle },
 	{ "|v|",      bstackhoriz },
-	{ "]M[",      centeredmaster },
+	{ "|M|",      centeredmaster },
 	{ "||=",      tilewide },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ NULL,       NULL },
@@ -101,8 +114,8 @@ static const Button buttons[] = {
 	{ ClkStatusText,        0,              Button3,        sigstatusbar,   {.i = 3} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
-    { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-    { ClkTagBar,            0,              Button1,        view,           {0} },
+  { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
+  { ClkTagBar,            0,              Button1,        view,           {0} },
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
