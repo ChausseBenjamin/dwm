@@ -8,6 +8,7 @@ static void incrovgaps(const Arg *arg);
 static void incrihgaps(const Arg *arg);
 static void incrivgaps(const Arg *arg);
 static void togglegaps(const Arg *arg);
+static void tilewide(Monitor *m);
 /* Layouts (delete the ones you do not need) */
 static void bstackhoriz(Monitor *m);
 static void centeredmaster(Monitor *m);
@@ -407,5 +408,33 @@ tile(Monitor *m)
 		} else {
 			resize(c, sx, sy, sw - (2*c->bw), sh * (c->cfact / sfacts) + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), 0);
 			sy += HEIGHT(c) + ih;
+		}
+}
+
+void
+tilewide(Monitor *m)
+{
+        unsigned int i, n, w, h, mw, mx, ty;
+	Client *c;
+
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	if (n == 0)
+		return;
+
+	if (n > m->nmaster)
+		mw = m->nmaster ? m->ww * m->mfact : 0;
+	else
+		mw = m->ww;
+	for (i = mx = ty = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		if (i < m->nmaster) {
+		        w = (mw - mx) / (MIN(n, m->nmaster) - i);
+		        resize(c, m->wx + mx, m->wy, w - (2*c->bw), (m->wh - ty) - (2*c->bw), 0);
+		        if  (mx + WIDTH(c) < m->ww)
+		                mx += WIDTH(c);
+		} else {
+			h = (m->wh - ty) / (n - i);
+			resize(c, m->wx + mw, m->wy + ty, m->ww - mw - (2*c->bw), h - (2*c->bw), 0);
+			if (ty + HEIGHT(c) < m->wh)
+				ty += HEIGHT(c);
 		}
 }
