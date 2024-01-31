@@ -57,15 +57,15 @@ static const int mainmon = 0; /* xsetroot will only change the bar on this monit
 /* Devide dependent configurations */
 #ifdef _HOST_BATTLESTATION
   // Main desktop uses a 4k monitor (good to have a bigger font)
-  static const char *fonts[] = { "monospace:size=18" };
+  static const char *fonts[] = { "monospace:size=16" };
   /* LayoutPerMonitor:       4k->tile, ultrawide->tilewide */
-  static const int lpm[] = { 0,        0 };
+  static const int lpm[] = { 0,        4 };
   /* Gaps are nice on a big monitor */
   static       int smartgaps = 0;  /* 1 means no outer gap when there is only one window */
 
 #else // _HOST_DEFAULT
   // Smaller font for laptop form factor
-  static const char *fonts[] = { "monospace:size=16" }; // HiDPI Framework laptop
+  static const char *fonts[] = { "monospace:size=14" }; // HiDPI Framework laptop
   /* LayoutPerMonitor:       main->tile */
   static const int lpm[] = { 0 };
   /* Gaps are nice on a big monitor */
