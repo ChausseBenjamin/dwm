@@ -401,53 +401,43 @@ tile(Monitor *m)
 
 
 void
-tilewide(Monitor *mon)
+tilewide(Monitor *m)
 {
-  // The only difference between this and the tile layout is that the master stack is tiled horizontally
 	unsigned int i, n;
-  int outerHoriz, outerVert, innerHoriz, innerVert;
-  int masterX = 0, masterY = 0, fullMasterWidth = 0, masterHeight = 0, masterWidth = 0;
-  int stackX = 0, stackY = 0, fullStackWidth =0, stackHeight = 0, stackWidth = 0;
-  float masterFactors, stackFactors;
-  int masterRests, stackRests;
-  Client *client;
+  int oh, ov, ih, iv;
+  int mx = 0, my = 0, fullmw = 0, mh = 0, mw = 0;
+  int sx = 0, sy = 0, sh = 0, sw = 0;
+  float mfacts, stacts;
+  int mrest, srest;
+  Client *c;
 
-	getgaps(mon, &outerHoriz, &outerVert, &innerHoriz, &innerVert, &n);
+	getgaps(m, &oh, &ov, &ih, &iv, &n);
 
   if (n == 0)
     return;
 
-  // Things that never change
-  stackX = masterX = mon->wx + outerVert;
-  stackY = masterY = mon->wy + outerHoriz;
-  masterHeight = mon->wh - 2*outerHoriz; // Since master tiles horizontally
-  stackHeight = mon->wh - 2*outerHoriz - innerHoriz * (n - mon->nmaster - 1);
+  sx = mx = m->wx + ov;
+  sy = my = m->wy + oh;
+  mh = m->wh - 2*oh; // Since master tiles horizontally
+  sh = m->wh - 2*oh - ih * (n - m->nmaster - 1);
+  fullmw = ((m->ww - 2*ov) * m->mfact);
+  sw = mw = m->ww - 2*ov - iv * (MIN(n, m->nmaster) - 1);
 
-  fullMasterWidth = ((mon->ww - 2*outerVert) * mon->mfact);
-  fullStackWidth = mon->ww - 2*outerVert - fullMasterWidth;
-
-  // Things that are true when there are no clients in the stack (only master)
-  stackWidth = masterWidth = mon->ww - 2*outerVert - innerVert * (MIN(n, mon->nmaster) - 1);
-
-  // Things that are true when there are both master and stack clients
-  if (mon->nmaster && n > mon->nmaster) {
-    // Master width is the total width minus the stack width and the inner vertical gap for each master client
-    // There is no minus 1 because you do want a gap between the master and stack
-    masterWidth = fullMasterWidth - innerVert*(mon->nmaster-1);
-    stackX = masterX + fullMasterWidth+innerVert;
-    stackWidth = (mon->ww - 2*outerVert) * (1-mon->mfact);
+  if (m->nmaster && n > m->nmaster) {
+    mw = fullmw - iv*(m->nmaster-1);
+    sx = mx + fullmw+iv;
+    sw = (m->ww - 2*ov) * (1-m->mfact);
   }
 
-  getfacts(mon, masterWidth, stackWidth, &masterFactors, &stackFactors, &masterRests, &stackRests);
+  getfacts(m, mw, sw, &mfacts, &stacts, &mrest, &srest);
 
-  // Resize the clients (master->horizontal, stack->vertical)
-  for (i=0, client = nexttiled(mon->clients); client; client = nexttiled(client->next), i++) {
-    if (i < mon->nmaster) {
-      resize(client, masterX, masterY, masterWidth * (client->cfact / masterFactors) + (i < masterRests ? 1 : 0) - (2*client->bw), masterHeight - (2*client->bw), 0);
-      masterX += WIDTH(client) + innerVert;
+  for (i=0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
+    if (i < m->nmaster) {
+      resize(c, mx, my, mw * (c->cfact / mfacts) + (i < mrest ? 1 : 0) - (2*c->bw), mh - (2*c->bw), 0);
+      mx += WIDTH(c) + iv;
     } else {
-      resize(client, stackX, stackY, stackWidth - (2*client->bw), stackHeight * (client->cfact / stackFactors) + ((i - mon->nmaster) < stackRests ? 1 : 0) - (2*client->bw), 0);
-      stackY += HEIGHT(client) + innerHoriz;
+      resize(c, sx, sy, sw - (2*c->bw), sh * (c->cfact / stacts) + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), 0);
+      sy += HEIGHT(c) + ih;
     }
   }
 
