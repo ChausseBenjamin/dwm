@@ -83,7 +83,7 @@ static const Layout layouts[] = {
 	{ "|v|",      bstackhoriz },
 	{ "|M|",      centeredmaster },
 	{ "||=",      tilewide },
-	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ "~O~",      NULL },    /* no layout function means floating behavior */
 	{ NULL,       NULL },
 };
 
