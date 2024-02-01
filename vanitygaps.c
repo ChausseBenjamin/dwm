@@ -400,6 +400,10 @@ tile(Monitor *m)
 }
 
 
+/*
+ * tilewide layout + gaps
+ * https://dwm.suckless.org/patches/tilewide/
+ */
 void
 tilewide(Monitor *m)
 {
